@@ -43,8 +43,8 @@ class Gui:
 
     def schedule_shutdown(self):
         try:
-            hours = int(self.hours_entry.get() or 0)
-            minutes = int(self.minutes_entry.get() or 0)
+            hours = int(self.hours_cb.get() or 0)
+            minutes = int(self.minutes_cb.get() or 0)
             total_seconds = hours * 3600 + minutes * 60
             if total_seconds <= 0:
                 raise ValueError
