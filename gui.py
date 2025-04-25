@@ -4,10 +4,12 @@ import program_options
 from timer import Timer
 
 
-
 class Gui:
+
     def __init__(self, root):
         self.countdown_label = None
+        self.programs_options = ['Shutdown', 'Sleep', 'Log out', 'Restart', 'Lock Screen']
+
         self.root = root
         self.root.title("Shutdown Timer")
         self.root.geometry("300x250")
