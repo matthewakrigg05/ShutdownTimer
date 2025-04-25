@@ -5,4 +5,4 @@ may wish to do the same thing.
 TODO:
 - [ ] Some simple error handling 
 - [ ] More input handling, not allowing 0 input for both mins and hours
-- [ ] Config gui to state - e.g shutdown scheduled or not
+- [X] Config gui to state - e.g shutdown scheduled or not

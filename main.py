@@ -1,5 +1,3 @@
-import platform
-
 import gui
 import tkinter as tk
 
