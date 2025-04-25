@@ -1,8 +1,8 @@
-import os
 import tkinter as tk
-import platform
 from tkinter import messagebox, ttk
+import program_options
 from timer import Timer
+
 
 
 class Gui:
@@ -16,7 +16,7 @@ class Gui:
         self.build_gui()
         self.timer = Timer(
             update_callback=self.update_countdown,
-            finish_callback=self.execute_shutdown
+            finish_callback=program_options.execute_shutdown
         )
 
     def build_gui(self):
@@ -46,8 +46,16 @@ class Gui:
         self.countdown_label = tk.Label(self.root, text="", font=("Helvetica", 12), fg="blue")
         self.countdown_label.pack(pady=10)
 
-        self.cancel_button = (tk.Button(self.root, text="Cancel Shutdown", command=self.cancel_shutdown))
+        self.cancel_button = (tk.Button(self.root, text="Cancel Shutdown", command=self.cancel))
         self.cancel_button.pack(pady=5)
+
+    def cancel(self):
+        self.timer.cancel()
+        self.countdown_label.config(text="Shutdown cancelled.")
+        messagebox.showinfo("Cancelled", "Scheduled shutdown has been cancelled.")
+
+        self.clear_gui()
+        self.build_gui()
 
     def schedule_shutdown(self):
         try:
@@ -65,24 +73,6 @@ class Gui:
             messagebox.showerror("Invalid Input", "Please enter valid length of time.")
 
     def update_countdown(self, time_str): self.countdown_label.config(text=time_str)
-
-    def execute_shutdown(self):
-        system = platform.system()
-        if system == "Windows":
-            os.system("shutdown -s -t 1")
-        elif system == "Linux" or system == "Darwin":
-            os.system("shutdown -h now")
-        else:
-            messagebox.showerror("Unsupported OS", f"Shutdown not supported on {system}")
-
-    def cancel_shutdown(self):
-        self.timer.cancel()
-        self.countdown_label.config(text="Shutdown cancelled.")
-        messagebox.showinfo("Cancelled", "Scheduled shutdown has been cancelled.")
-
-        self.clear_gui()
-
-        self.build_gui()
 
     def clear_gui(self):
         for widget in self.root.winfo_children():
