@@ -41,11 +41,7 @@ class Gui:
         self.schedule_button.pack(pady=5)
 
     def scheduled_gui(self):
-        self.hours_cb.destroy()
-        self.hours_label.destroy()
-        self.minutes_cb.destroy()
-        self.minutes_label.destroy()
-        self.schedule_button.destroy()
+        self.clear_gui()
 
         self.countdown_label = tk.Label(self.root, text="", font=("Helvetica", 12), fg="blue")
         self.countdown_label.pack(pady=10)
@@ -66,7 +62,7 @@ class Gui:
             self.timer.start(total_seconds)
 
         except ValueError:
-            messagebox.showerror("Invalid Input", "Please enter valid numbers.")
+            messagebox.showerror("Invalid Input", "Please enter valid length of time.")
 
     def update_countdown(self, time_str): self.countdown_label.config(text=time_str)
 
@@ -84,7 +80,10 @@ class Gui:
         self.countdown_label.config(text="Shutdown cancelled.")
         messagebox.showinfo("Cancelled", "Scheduled shutdown has been cancelled.")
 
-        for widget in self.root.winfo_children():
-            widget.destroy()
+        self.clear_gui()
 
         self.build_gui()
+
+    def clear_gui(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
