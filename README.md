@@ -3,6 +3,6 @@ of reasons, going to sleep, downloads etc. So I have taken it upon myself to mak
 may wish to do the same thing.
 
 TODO:
-- [ ] Some simple error handling 
-- [ ] More input handling, not allowing 0 input for both mins and hours
+- [X] Some simple error handling 
+- [X] More input handling, not allowing 0 input for both mins and hours
 - [X] Config gui to state - e.g shutdown scheduled or not
