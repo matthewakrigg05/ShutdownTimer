@@ -1,8 +1,7 @@
 import os
 import tkinter as tk
-from sys import platform
+import platform
 from tkinter import messagebox, ttk
-
 from timer import Timer
 
 
@@ -59,7 +58,7 @@ class Gui:
     def execute_shutdown(self):
         system = platform.system()
         if system == "Windows":
-            os.system("shutdown /s /t 1")
+            os.system("shutdown -s -t 1")
         elif system == "Linux" or system == "Darwin":
             os.system("shutdown -h now")
         else:
