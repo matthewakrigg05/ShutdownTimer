@@ -13,3 +13,17 @@ def execute_shutdown():
         messagebox.showerror("Unsupported Operating System", f"Shutdown not supported on {system}")
 
 
+def execute_logout():
+    pass
+
+
+def execute_sleep():
+    pass
+
+
+def execute_restart():
+    pass
+
+
+def execute_lockscreen():
+    pass

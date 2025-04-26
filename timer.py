@@ -11,7 +11,7 @@ class Timer:
 
     def start(self, total_seconds):
         if total_seconds <= 0:
-            raise ValueError("Total seconds must be positive.")
+            raise ValueError("Total time must be positive.")
 
         self.cancel_event.clear()
 

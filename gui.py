@@ -7,7 +7,7 @@ from timer import Timer
 class Gui:
 
     def __init__(self, root):
-        self.option_selected = None
+        self.option_scheduled = None
         self.countdown_label = None
         self.programs_options = ['Shutdown', 'Sleep', 'Log out', 'Restart', 'Lock Screen']
 
@@ -17,10 +17,6 @@ class Gui:
         self.root.resizable(False, False)
 
         self.build_gui()
-        self.timer = Timer(
-            update_callback=self.update_countdown,
-            finish_callback=program_options.execute_shutdown
-        )
 
     def build_gui(self):
         frame = tk.Frame(self.root)
@@ -57,28 +53,50 @@ class Gui:
         self.countdown_label = tk.Label(self.root, text="", font=("Helvetica", 12), fg="blue")
         self.countdown_label.pack(pady=10)
 
-        self.cancel_button = (tk.Button(self.root, text=f"Cancel {self.option_selected}", command=self.cancel))
+        self.cancel_button = (tk.Button(self.root, text=f"Cancel {self.option_scheduled}", command=self.cancel))
         self.cancel_button.pack(pady=5)
 
     def cancel(self):
         self.timer.cancel()
-        self.countdown_label.config(text=f"{self.option_selected} cancelled.")
-        messagebox.showinfo("Cancelled", f"Scheduled {self.option_selected} has been cancelled.")
+        self.countdown_label.config(text=f"{self.option_scheduled} cancelled.")
+        messagebox.showinfo("Cancelled", f"Scheduled {self.option_scheduled} has been cancelled.")
 
         self.clear_gui()
         self.build_gui()
 
     def schedule(self):
+
+
+        self.option_scheduled = self.options_cb.get()
         try:
             hours = int(self.hours_cb.get() or 0)
             minutes = int(self.minutes_cb.get() or 0)
             total_seconds = hours * 3600 + minutes * 60
+
             if total_seconds <= 0:
                 raise ValueError
 
-            messagebox.showinfo(f"{self.options_cb.get()} Scheduled", f"{self.options_cb.get()} in {hours}h {minutes}m.")
-            self.option_selected = self.options_cb.get()
+            messagebox.showinfo(f"{self.option_scheduled} Scheduled", f"{self.option_scheduled} in {hours}h {minutes}m.")
+
             self.scheduled_gui()
+
+            self.timer = Timer(
+                update_callback=self.update_countdown,
+                finish_callback=None
+            )
+
+            match self.option_scheduled:
+                case "Shutdown":
+                    self.timer.finish_callback = program_options.execute_shutdown
+                case "Sleep":
+                    self.timer.finish_callback = program_options.execute_sleep
+                case "Restart":
+                    self.timer.finish_callback = program_options.execute_restart
+                case "Log out":
+                    self.timer.finish_callback = program_options.execute_logout
+                case "Lock screen":
+                    self.timer.finish_callback = program_options.execute_lockscreen
+
             self.timer.start(total_seconds)
 
         except ValueError:
