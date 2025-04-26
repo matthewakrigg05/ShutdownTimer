@@ -25,19 +25,29 @@ class Gui:
         frame = tk.Frame(self.root)
         frame.pack(pady=15)
 
-        self.hours_label = (tk.Label(frame, text="Hours"))
-        self.hours_label.grid(row=0, column=0, padx=10)
+        self.options_label = tk.Label(frame, text="Please pick an option: ")
+        self.options_label.grid(row=0, column=0, padx=10)
+        self.options_cb = ttk.Combobox(frame, width=15, state="readonly")
+        self.options_cb['values'] = self.programs_options
+        self.options_cb.current(0)
+        self.options_cb.grid(row=0, column=1, padx=10)
+
+        self.desc_label = tk.Label(frame, text="Please enter a length of time: ")
+        self.desc_label.grid(row=1, column=0, pady=10, columnspan=2)
+
+        self.hours_label = tk.Label(frame, text="Hours")
+        self.hours_label.grid(row=2, column=0, padx=5)
         self.hours_cb = ttk.Combobox(frame, width=5, state="readonly")
         self.hours_cb['values'] = [f"{i:02}" for i in range(24)]
         self.hours_cb.current(0)
-        self.hours_cb.grid(row=1, column=0, padx=10)
+        self.hours_cb.grid(row=3, column=0, padx=5)
 
         self.minutes_label = (tk.Label(frame, text="Minutes"))
-        self.minutes_label.grid(row=0, column=1, padx=10)
+        self.minutes_label.grid(row=2, column=1, padx=5)
         self.minutes_cb = ttk.Combobox(frame, width=5, state="readonly")
         self.minutes_cb['values'] = [f"{i:02}" for i in range(60)]
         self.minutes_cb.current(0)
-        self.minutes_cb.grid(row=1, column=1, padx=10)
+        self.minutes_cb.grid(row=3, column=1, padx=5)
 
         self.schedule_button = (tk.Button(self.root, text="Schedule Shutdown", command=self.schedule_shutdown))
         self.schedule_button.pack(pady=5)
