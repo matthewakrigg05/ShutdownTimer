@@ -4,7 +4,7 @@ import tkinter as tk
 
 def main():
     root = tk.Tk()
-    UI = gui.Gui(root)
+    gui.Gui(root)
     root.mainloop()
 
 

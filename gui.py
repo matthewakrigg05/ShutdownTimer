@@ -1,15 +1,13 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
-import program_options
+from program_options import OptionHandler
 from timer import Timer
 
 
 class Gui:
 
     def __init__(self, root):
-        self.option_scheduled = None
-        self.countdown_label = None
-        self.programs_options = ['Shutdown', 'Sleep', 'Log out', 'Restart', 'Lock Screen']
+        self.programs_options = ['Shutdown', 'Sleep', 'Log Out', 'Restart', 'Lock Screen']
 
         self.root = root
         self.root.title("Shutdown Timer")
@@ -65,8 +63,6 @@ class Gui:
         self.build_gui()
 
     def schedule(self):
-
-
         self.option_scheduled = self.options_cb.get()
         try:
             hours = int(self.hours_cb.get() or 0)
@@ -80,22 +76,12 @@ class Gui:
 
             self.scheduled_gui()
 
+            self.option_handler = OptionHandler(self.option_scheduled)
+            self.option_handler.check_options()
             self.timer = Timer(
                 update_callback=self.update_countdown,
-                finish_callback=None
+                finish_callback=self.option_handler.function_needed
             )
-
-            match self.option_scheduled:
-                case "Shutdown":
-                    self.timer.finish_callback = program_options.execute_shutdown
-                case "Sleep":
-                    self.timer.finish_callback = program_options.execute_sleep
-                case "Restart":
-                    self.timer.finish_callback = program_options.execute_restart
-                case "Log out":
-                    self.timer.finish_callback = program_options.execute_logout
-                case "Lock screen":
-                    self.timer.finish_callback = program_options.execute_lockscreen
 
             self.timer.start(total_seconds)
 
