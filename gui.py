@@ -7,6 +7,7 @@ from timer import Timer
 class Gui:
 
     def __init__(self, root):
+        self.option_selected = None
         self.countdown_label = None
         self.programs_options = ['Shutdown', 'Sleep', 'Log out', 'Restart', 'Lock Screen']
 
@@ -26,50 +27,48 @@ class Gui:
         frame.pack(pady=15)
 
         self.options_label = tk.Label(frame, text="Please pick an option: ")
-        self.options_label.grid(row=0, column=0, padx=10)
-        self.options_cb = ttk.Combobox(frame, width=15, state="readonly")
-        self.options_cb['values'] = self.programs_options
+        self.options_label.grid(row=0, column=0, padx=10, columnspan=2)
+        self.options_cb = ttk.Combobox(frame, width=15, state="readonly", values=self.programs_options)
         self.options_cb.current(0)
-        self.options_cb.grid(row=0, column=1, padx=10)
+        self.options_cb.grid(row=1, column=0, padx=10, columnspan=2)
 
         self.desc_label = tk.Label(frame, text="Please enter a length of time: ")
-        self.desc_label.grid(row=1, column=0, pady=10, columnspan=2)
+        self.desc_label.grid(row=2, column=0, pady=10, columnspan=2)
 
         self.hours_label = tk.Label(frame, text="Hours")
-        self.hours_label.grid(row=2, column=0, padx=5)
+        self.hours_label.grid(row=3, column=0, padx=5)
         self.hours_cb = ttk.Combobox(frame, width=5, state="readonly")
         self.hours_cb['values'] = [f"{i:02}" for i in range(24)]
         self.hours_cb.current(0)
-        self.hours_cb.grid(row=3, column=0, padx=5)
+        self.hours_cb.grid(row=4, column=0, padx=5)
 
         self.minutes_label = (tk.Label(frame, text="Minutes"))
-        self.minutes_label.grid(row=2, column=1, padx=5)
+        self.minutes_label.grid(row=3, column=1, padx=5)
         self.minutes_cb = ttk.Combobox(frame, width=5, state="readonly")
         self.minutes_cb['values'] = [f"{i:02}" for i in range(60)]
         self.minutes_cb.current(0)
-        self.minutes_cb.grid(row=3, column=1, padx=5)
+        self.minutes_cb.grid(row=4, column=1, padx=5)
 
-        self.schedule_button = (tk.Button(self.root, text="Schedule Shutdown", command=self.schedule_shutdown))
+        self.schedule_button = (tk.Button(self.root, text="Schedule", command=self.schedule))
         self.schedule_button.pack(pady=5)
 
     def scheduled_gui(self):
         self.clear_gui()
-
         self.countdown_label = tk.Label(self.root, text="", font=("Helvetica", 12), fg="blue")
         self.countdown_label.pack(pady=10)
 
-        self.cancel_button = (tk.Button(self.root, text="Cancel Shutdown", command=self.cancel))
+        self.cancel_button = (tk.Button(self.root, text=f"Cancel {self.option_selected}", command=self.cancel))
         self.cancel_button.pack(pady=5)
 
     def cancel(self):
         self.timer.cancel()
-        self.countdown_label.config(text="Shutdown cancelled.")
-        messagebox.showinfo("Cancelled", "Scheduled shutdown has been cancelled.")
+        self.countdown_label.config(text=f"{self.option_selected} cancelled.")
+        messagebox.showinfo("Cancelled", f"Scheduled {self.option_selected} has been cancelled.")
 
         self.clear_gui()
         self.build_gui()
 
-    def schedule_shutdown(self):
+    def schedule(self):
         try:
             hours = int(self.hours_cb.get() or 0)
             minutes = int(self.minutes_cb.get() or 0)
@@ -77,7 +76,8 @@ class Gui:
             if total_seconds <= 0:
                 raise ValueError
 
-            messagebox.showinfo("Shutdown Scheduled", f"Shutdown in {hours}h {minutes}m.")
+            messagebox.showinfo(f"{self.options_cb.get()} Scheduled", f"{self.options_cb.get()} in {hours}h {minutes}m.")
+            self.option_selected = self.options_cb.get()
             self.scheduled_gui()
             self.timer.start(total_seconds)
 
