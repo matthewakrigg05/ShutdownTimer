@@ -31,13 +31,40 @@ class OptionHandler:
             messagebox.showerror("Unsupported Operating System", f"Shutdown not supported on {self.operating_system}")
 
     def execute_logout(self):
-        messagebox.showinfo("Unsupported Operating System", f"Logged Out!")
+        if self.operating_system == "Windows":
+            os.system("shutdown -l")
+        elif self.operating_system == "Linux":
+            os.system("gnome-session-quit --logout --no-prompt")  # works for GNOME desktops
+        elif self.operating_system == "Darwin":
+            os.system('osascript -e \'tell application "System Events" to log out\'')
+        else:
+            messagebox.showerror("Unsupported Operating System", f"Logout not supported on {self.operating_system}")
 
     def execute_sleep(self):
-        messagebox.showinfo("Unsupported Operating System", f"Sleeping!")
+        if self.operating_system == "Windows":
+            os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
+        elif self.operating_system == "Linux":
+            os.system("systemctl suspend")
+        elif self.operating_system == "Darwin":
+            os.system('pmset sleepnow')
+        else:
+            messagebox.showerror("Unsupported Operating System", f"Sleep not supported on {self.operating_system}")
 
     def execute_restart(self):
-        messagebox.showinfo("Unsupported Operating System", f"Restarted!")
+        if self.operating_system == "Windows":
+            os.system("shutdown -r -t 1")
+        elif self.operating_system == "Linux" or self.operating_system == "Darwin":
+            os.system("shutdown -r now")
+        else:
+            messagebox.showerror("Unsupported Operating System", f"Restart not supported on {self.operating_system}")
 
     def execute_lockscreen(self):
-        messagebox.showinfo("Unsupported Operating System", f"Locked Screen!")
+        if self.operating_system == "Windows":
+            os.system("rundll32.exe user32.dll,LockWorkStation")
+        elif self.operating_system == "Linux":
+            os.system("gnome-screensaver-command -l")  # works if gnome-screensaver installed
+        elif self.operating_system == "Darwin":
+            os.system('/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend')
+        else:
+            messagebox.showerror("Unsupported Operating System",
+                                 f"Lock screen not supported on {self.operating_system}")
