@@ -4,6 +4,7 @@ from program_options import OptionHandler
 from timer import Timer
 
 
+# noinspection PyAttributeOutsideInit
 class Gui:
 
     def __init__(self, root):
@@ -17,42 +18,69 @@ class Gui:
         self.build_gui()
 
     def build_gui(self):
-        frame = tk.Frame(self.root)
-        frame.pack(pady=15)
+        self.root.configure(bg="#f0f0f0")  # Light background
 
-        self.options_label = tk.Label(frame, text="Please pick an option: ")
-        self.options_label.grid(row=0, column=0, padx=10, columnspan=2)
-        self.options_cb = ttk.Combobox(frame, width=15, state="readonly", values=self.programs_options)
+        frame = tk.Frame(self.root, bg="#f0f0f0")
+        frame.pack(pady=20)
+
+        title = tk.Label(frame, text="System Action Scheduler", font=("Helvetica", 14, "bold"), bg="#f0f0f0")
+        title.grid(row=0, column=0, columnspan=2, pady=(0, 10))
+
+        self.options_label = tk.Label(frame, text="Select action:", bg="#f0f0f0")
+        self.options_label.grid(row=1, column=0, sticky="e", padx=5, pady=5)
+
+        self.options_cb = ttk.Combobox(frame, width=17, state="readonly", values=self.programs_options)
         self.options_cb.current(0)
-        self.options_cb.grid(row=1, column=0, padx=10, columnspan=2)
+        self.options_cb.grid(row=1, column=1, sticky="w", padx=5, pady=5)
 
-        self.desc_label = tk.Label(frame, text="Please enter a length of time: ")
-        self.desc_label.grid(row=2, column=0, pady=10, columnspan=2)
+        self.desc_label = tk.Label(frame, text="Delay duration:", bg="#f0f0f0")
+        self.desc_label.grid(row=2, column=0, sticky="e", padx=5, pady=(10, 5))
 
-        self.hours_label = tk.Label(frame, text="Hours")
-        self.hours_label.grid(row=3, column=0, padx=5)
-        self.hours_cb = ttk.Combobox(frame, width=5, state="readonly")
-        self.hours_cb['values'] = [f"{i:02}" for i in range(24)]
+        time_frame = tk.Frame(frame, bg="#f0f0f0")
+        time_frame.grid(row=2, column=1, sticky="w", pady=(10, 5))
+
+        self.hours_cb = ttk.Combobox(time_frame, width=5, state="readonly", values=[f"{i:02}" for i in range(24)])
         self.hours_cb.current(0)
-        self.hours_cb.grid(row=4, column=0, padx=5)
+        self.hours_cb.grid(row=0, column=0, padx=(0, 5))
 
-        self.minutes_label = (tk.Label(frame, text="Minutes"))
-        self.minutes_label.grid(row=3, column=1, padx=5)
-        self.minutes_cb = ttk.Combobox(frame, width=5, state="readonly")
-        self.minutes_cb['values'] = [f"{i:02}" for i in range(60)]
+        hours_label = tk.Label(time_frame, text="h", bg="#f0f0f0")
+        hours_label.grid(row=0, column=1)
+
+        self.minutes_cb = ttk.Combobox(time_frame, width=5, state="readonly", values=['00', '15', '30', '45'])
         self.minutes_cb.current(0)
-        self.minutes_cb.grid(row=4, column=1, padx=5)
+        self.minutes_cb.grid(row=0, column=2, padx=(10, 5))
 
-        self.schedule_button = (tk.Button(self.root, text="Schedule", command=self.schedule))
-        self.schedule_button.pack(pady=5)
+        minutes_label = tk.Label(time_frame, text="m", bg="#f0f0f0")
+        minutes_label.grid(row=0, column=3)
+
+        self.schedule_button = tk.Button(self.root, text="Schedule Action", command=self.schedule, bg="#4CAF50",
+                                         fg="white", font=("Helvetica", 10, "bold"))
+        self.schedule_button.pack(pady=15)
 
     def scheduled_gui(self):
         self.clear_gui()
-        self.countdown_label = tk.Label(self.root, text="", font=("Helvetica", 12), fg="blue")
-        self.countdown_label.pack(pady=10)
 
-        self.cancel_button = (tk.Button(self.root, text=f"Cancel {self.option_scheduled}", command=self.cancel))
-        self.cancel_button.pack(pady=5)
+        frame = tk.Frame(self.root, bg="#f0f0f0")
+        frame.pack(pady=30)
+
+        title = tk.Label(frame, text=f"{self.option_scheduled} Scheduled", font=("Helvetica", 14, "bold"), fg="blue",
+                         bg="#f0f0f0")
+        title.pack(pady=(0, 10))
+
+        self.countdown_label = tk.Label(frame, text="", font=("Helvetica", 12), fg="blue", bg="#f0f0f0")
+        self.countdown_label.pack(pady=5)
+
+        self.cancel_button = tk.Button(
+            self.root,
+            text=f"Cancel {self.option_scheduled}",
+            command=self.cancel,
+            bg="#d9534f",
+            fg="white",
+            font=("Helvetica", 10, "bold"),
+            padx=10,
+            pady=5
+        )
+        self.cancel_button.pack(pady=10)
 
     def cancel(self):
         self.timer.cancel()
