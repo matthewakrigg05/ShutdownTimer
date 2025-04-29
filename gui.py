@@ -4,6 +4,7 @@ from program_options import OptionHandler
 from timer import Timer
 
 
+# noinspection PyAttributeOutsideInit
 class Gui:
 
     def __init__(self, root):
@@ -39,7 +40,7 @@ class Gui:
         self.minutes_label = (tk.Label(frame, text="Minutes"))
         self.minutes_label.grid(row=3, column=1, padx=5)
         self.minutes_cb = ttk.Combobox(frame, width=5, state="readonly")
-        self.minutes_cb['values'] = [f"{i:02}" for i in range(60)]
+        self.minutes_cb['values'] = ['00', '15', '30', '45']
         self.minutes_cb.current(0)
         self.minutes_cb.grid(row=4, column=1, padx=5)
 
